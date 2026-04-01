@@ -15,16 +15,16 @@ struct Cookie {
 
 let gcmMessageIDKey = "87336923954"
 
-let rootUrl = URL(string: "https://khmyznikov.com/ios-pwa-shell/")!
-
-// rootUrl should be in allowedOrigins. allowedOrigins + authOrigins <= 10 domains max.
-// All domains should be in WKAppBoundDomains list
-let allowedOrigins = [ "khmyznikov.com", "localhost" ]
-let authOrigins = [ "tomayac.github.io", "whatpwacando.today", "whatwebcando.today"]
-// If you don't need Offline support and you need a lot of domains, you can 
-// disable limitsNavigationsToAppBoundDomains in WebView.swift
-// it's not recommended because Service Worker will be not available for your app
-
+let rootUrl = URL(string: "https://companionation.com")!
+let allowedOrigins: [String] = [
+    "companionation.com",
+    "accounts.google.com",
+]
+let authOrigins: [String] = [
+    "accounts.google.com",
+    "apis.google.com",
+    "oauth2.googleapis.com"
+]
 let platformCookie = Cookie(name: "app-platform", value: "ios/ipados")
 
 // UI options
