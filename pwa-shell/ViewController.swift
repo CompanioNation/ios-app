@@ -274,9 +274,10 @@ extension ViewController: WKScriptMessageHandler {
                                 // Extract and print the productID and quantity.
                                 if let productID = jsonObject["productID"] as? String {
                                     let quantity = jsonObject["quantity"] as? Int ?? 1;
+                                    let userUUID = jsonObject["userUUID"] as? String ?? "00000000-0000-0000-0000-000000000000"
                                     
                                     do {
-                                        try await storeKitAPI.purchaseProduct(productID: productID, quantity: quantity)
+                                        try await storeKitAPI.purchaseProduct(productID: productID, quantity: quantity, userUUID: userUUID)
                                         returnPurchaseResult(state: "success")
                                     } catch StoreKitAPI.ProductError.productNotFound {
                                         returnPurchaseResult(state: "notFound")
