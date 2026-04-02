@@ -147,15 +147,6 @@ jobs:
               <string>app-store-connect</string>
               <key>teamID</key>
               <string>${{ secrets.APPLE_TEAM_ID }}</string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>com.companionation.app</key>
-                  <string>CompanioNation App Store</string>
-              </dict>
-              <key>stripSwiftSymbols</key>
-              <true/>
               <key>uploadBitcode</key>
               <false/>
               <key>uploadSymbols</key>
