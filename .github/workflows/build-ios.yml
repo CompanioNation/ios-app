@@ -133,6 +133,29 @@ jobs:
             -exportPath build/output \
             -exportOptionsPlist ExportOptions.plist
 
+      - name: Upload to App Store Connect
+        if: env.P12_BASE64 != ''
+        env:
+          P12_BASE64: ${{ secrets.P12_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          # Write the API key to the location Xcode tools expect
+          mkdir -p ~/.private_keys
+          echo "$ASC_KEY_P8" > ~/.private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+          # Find the IPA
+          IPA_PATH=$(find build/output -name "*.ipa" | head -1)
+          echo "Uploading $IPA_PATH"
+
+          # Upload to App Store Connect
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_PATH" \
+            --apiKey "$ASC_KEY_ID" \
+            --apiIssuer "$ASC_ISSUER_ID"
+
       - name: Upload IPA artifact
         if: env.P12_BASE64 != ''
         uses: actions/upload-artifact@v4
