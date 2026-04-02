@@ -157,7 +157,8 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath build/CompanioNation.xcarchive \
             -exportPath build/output \
-            -exportOptionsPlist ExportOptions.plist
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates
 
       - name: Upload IPA artifact
         if: env.P12_BASE64 != ''
