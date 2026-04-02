@@ -20,23 +20,6 @@ jobs:
           sudo gem install cocoapods
           pod install
 
-      - name: Disable code signing for Pod targets
-        run: |
-          ruby -e "
-            require 'xcodeproj'
-            project = Xcodeproj::Project.open('Pods/Pods.xcodeproj')
-            project.targets.each do |target|
-              target.build_configurations.each do |config|
-                config.build_settings['CODE_SIGN_STYLE']            = 'Automatic'
-                config.build_settings['CODE_SIGNING_REQUIRED']      = 'NO'
-                config.build_settings['CODE_SIGNING_ALLOWED']       = 'NO'
-                config.build_settings.delete('PROVISIONING_PROFILE_SPECIFIER')
-                config.build_settings.delete('PROVISIONING_PROFILE')
-              end
-            end
-            project.save
-          "
-
       - name: Install signing certificate
         if: env.P12_BASE64 != ''
         env:
