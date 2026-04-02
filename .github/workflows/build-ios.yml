@@ -111,7 +111,10 @@ jobs:
             -archivePath build/CompanioNation.xcarchive \
             -destination 'generic/platform=iOS' \
             DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" \
-            PRODUCT_BUNDLE_IDENTIFIER=com.companionation.app
+            PRODUCT_BUNDLE_IDENTIFIER=com.companionation.app \
+            PROVISIONING_PROFILE_SPECIFIER="CompanioNation App Store" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution"
 
       - name: Export IPA
         if: env.P12_BASE64 != ''
