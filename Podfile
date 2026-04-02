@@ -2,8 +2,9 @@
 platform :ios, '15.0'
 
 target 'pwa-shell' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
+  # Static linkage: Firebase compiles into the app binary.
+  # No separate .framework bundles = no provisioning profile errors at export.
+  use_frameworks! :linkage => :static
 
   # Add the pod for Firebase Cloud Messaging
   pod 'Firebase/Messaging'
