@@ -63,45 +63,9 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      - name: Create placeholder GoogleService-Info.plist
+      - name: Copy GoogleService-Info.plist to Entitlements folder
         run: |
-          mkdir -p pwa-shell/Entitlements
-          cat > pwa-shell/Entitlements/GoogleService-Info.plist <<'PLIST'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>CLIENT_ID</key>
-              <string>placeholder</string>
-              <key>REVERSED_CLIENT_ID</key>
-              <string>placeholder</string>
-              <key>API_KEY</key>
-              <string>placeholder</string>
-              <key>GCM_SENDER_ID</key>
-              <string>000000000000</string>
-              <key>PLIST_VERSION</key>
-              <string>1</string>
-              <key>BUNDLE_ID</key>
-              <string>com.companionation.app</string>
-              <key>PROJECT_ID</key>
-              <string>placeholder</string>
-              <key>STORAGE_BUCKET</key>
-              <string>placeholder.appspot.com</string>
-              <key>IS_ADS_ENABLED</key>
-              <false/>
-              <key>IS_ANALYTICS_ENABLED</key>
-              <false/>
-              <key>IS_APPINVITE_ENABLED</key>
-              <true/>
-              <key>IS_GCM_ENABLED</key>
-              <true/>
-              <key>IS_SIGNIN_ENABLED</key>
-              <true/>
-              <key>GOOGLE_APP_ID</key>
-              <string>1:000000000000:ios:0000000000000000</string>
-          </dict>
-          </plist>
-          PLIST
+          cp pwa-shell/GoogleService-Info.plist pwa-shell/Entitlements/GoogleService-Info.plist
 
       - name: Build (no signing)
         if: env.P12_BASE64 == ''
@@ -133,12 +97,41 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Distribution"
 
+      - name: Debug - List certificates
+        run: |
+          security find-identity -v -p codesigning
+
+      - name: Debug - List provisioning profiles
+        run: |
+          for f in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
+            echo "=== $f ==="
+            security cms -D -i "$f" | plutil -p - | grep -E 'UUID|Name|TeamIdentifier|Entitlements|application-identifier|aps-environment|associated-domains' || true
+          done
+
+      - name: Debug - Profile embedded in archive
+        run: |
+          ARCHIVE=$(find ~/Library/Developer/Xcode/Archives -name "*.xcarchive" | head -1)
+          echo "Archive: $ARCHIVE"
+          EMBEDDED="$ARCHIVE/Products/Applications/CompanioNation.app/embedded.mobileprovision"
+          if [ -f "$EMBEDDED" ]; then
+            security cms -D -i "$EMBEDDED" | plutil -p - | grep -E 'UUID|Name|Entitlements|aps-environment|associated-domains' || true
+          else
+            echo "No embedded.mobileprovision found"
+            find "$ARCHIVE" -name "*.mobileprovision" || true
+          fi
+
+      - name: Debug - Entitlements on signed app in archive
+        run: |
+          ARCHIVE=$(find ~/Library/Developer/Xcode/Archives -name "*.xcarchive" | head -1)
+          APP="$ARCHIVE/Products/Applications/CompanioNation.app"
+          codesign -d --entitlements - "$APP" 2>/dev/null || true
+
       - name: Export IPA
         if: env.P12_BASE64 != ''
         env:
           P12_BASE64: ${{ secrets.P12_BASE64 }}
         run: |
-          cat > ExportOptions.plist <<EOF
+          cat > ExportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
