@@ -97,35 +97,6 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Distribution"
 
-      - name: Debug - List certificates
-        run: |
-          security find-identity -v -p codesigning
-
-      - name: Debug - List provisioning profiles
-        run: |
-          for f in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
-            echo "=== $f ==="
-            security cms -D -i "$f" | plutil -p - | grep -E 'UUID|Name|TeamIdentifier|Entitlements|application-identifier|aps-environment|associated-domains' || true
-          done
-
-      - name: Debug - Profile embedded in archive
-        run: |
-          ARCHIVE=$(find ~/Library/Developer/Xcode/Archives -name "*.xcarchive" | head -1)
-          echo "Archive: $ARCHIVE"
-          EMBEDDED="$ARCHIVE/Products/Applications/CompanioNation.app/embedded.mobileprovision"
-          if [ -f "$EMBEDDED" ]; then
-            security cms -D -i "$EMBEDDED" | plutil -p - | grep -E 'UUID|Name|Entitlements|aps-environment|associated-domains' || true
-          else
-            echo "No embedded.mobileprovision found"
-            find "$ARCHIVE" -name "*.mobileprovision" || true
-          fi
-
-      - name: Debug - Entitlements on signed app in archive
-        run: |
-          ARCHIVE=$(find ~/Library/Developer/Xcode/Archives -name "*.xcarchive" | head -1)
-          APP="$ARCHIVE/Products/Applications/CompanioNation.app"
-          codesign -d --entitlements - "$APP" 2>/dev/null || true
-
       - name: Export IPA
         if: env.P12_BASE64 != ''
         env:
@@ -140,6 +111,15 @@ jobs:
               <string>app-store-connect</string>
               <key>teamID</key>
               <string>${{ secrets.APPLE_TEAM_ID }}</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>signingCertificate</key>
+              <string>Apple Distribution</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.companionation.app</key>
+                  <string>CompanioNation App Store</string>
+              </dict>
               <key>uploadBitcode</key>
               <false/>
               <key>uploadSymbols</key>
@@ -150,8 +130,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath build/CompanioNation.xcarchive \
             -exportPath build/output \
-            -exportOptionsPlist ExportOptions.plist \
-            -allowProvisioningUpdates
+            -exportOptionsPlist ExportOptions.plist
 
       - name: Upload IPA artifact
         if: env.P12_BASE64 != ''
