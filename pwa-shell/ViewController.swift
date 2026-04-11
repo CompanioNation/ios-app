@@ -241,6 +241,9 @@ extension UIColor {
 extension ViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
+            case "companioNation":
+                // Presence-only handler so isNativeIosApp() JS detection returns true
+                break
             case "print":
                 printView(webView: CompanioNation.webView)
             case "push-subscribe":
