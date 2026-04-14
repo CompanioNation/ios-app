@@ -19,11 +19,13 @@ let rootUrl = URL(string: "https://companionation.com")!
 let allowedOrigins: [String] = [
     "companionation.com",
     "accounts.google.com",
+    "appleid.apple.com",
 ]
 let authOrigins: [String] = [
     "accounts.google.com",
     "apis.google.com",
-    "oauth2.googleapis.com"
+    "oauth2.googleapis.com",
+    "appleid.apple.com"
 ]
 let platformCookie = Cookie(name: "app-platform", value: "ios/ipados")
 
