@@ -19,10 +19,12 @@ let rootUrl = URL(string: "https://companionation.com")!
 let allowedOrigins: [String] = [
     "companionation.com",
     "accounts.google.com",
+    "accounts.youtube.com",
     "appleid.apple.com",
 ]
 let authOrigins: [String] = [
     "accounts.google.com",
+    "accounts.youtube.com",
     "apis.google.com",
     "oauth2.googleapis.com",
     "appleid.apple.com"
