@@ -103,10 +103,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-<key>WKAppBoundDomains</key>
-<array>
-    <string>companionation.com</string>
-    <string>accounts.google.com</string>
-    <string>appleid.apple.com</string>
-</array></dict>
+	<key>WKAppBoundDomains</key>
+	<array>
+	    <string>companionation.com</string>
+	    <string>accounts.google.com</string>
+	    <string>accounts.youtube.com</string>
+	    <string>oauth2.googleapis.com</string>
+	    <string>apis.google.com</string>
+	    <string>appleid.apple.com</string>
+	</array>
+</dict>
 </plist>
