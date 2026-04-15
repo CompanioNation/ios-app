@@ -13,7 +13,7 @@ struct Cookie {
     var value: String
 }
 
-let gcmMessageIDKey = "87336923954"
+let gcmMessageIDKey = "gcm.message_id"
 
 let rootUrl = URL(string: "https://companionation.com")!
 let allowedOrigins: [String] = [
