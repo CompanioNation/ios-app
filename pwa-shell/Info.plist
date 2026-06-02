@@ -47,11 +47,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Capture Video by user request</string>
+	<string>CompanioNation uses the camera so you can take a photo to set or update your profile picture — for example, snapping a new headshot to add to your dating profile instead of choosing an existing photo from your library.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Track current location by user request</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Capture Audio by user request</string>
+	<string>CompanioNation uses your location to automatically detect and pre-fill your nearest city when you complete or edit your profile — for example, selecting your city for you so you don't have to search for it manually. You can always change it.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -73,7 +71,6 @@
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
