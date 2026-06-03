@@ -175,12 +175,24 @@ jobs:
           IPA_PATH=$(find build/output -name "*.ipa" | head -1)
           echo "Uploading $IPA_PATH"
 
-          # Upload to App Store Connect
+          # Upload to App Store Connect.
+          # altool frequently prints ERROR but still exits 0, so GitHub would mark
+          # the step green on a failed upload. Capture the output and fail the step
+          # explicitly if altool reports a non-zero exit OR prints an error line.
+          set -o pipefail
+          UPLOAD_LOG="$RUNNER_TEMP/altool-upload.log"
           xcrun altool --upload-app \
             --type ios \
             --file "$IPA_PATH" \
             --apiKey "$ASC_KEY_ID" \
-            --apiIssuer "$ASC_ISSUER_ID"
+            --apiIssuer "$ASC_ISSUER_ID" 2>&1 | tee "$UPLOAD_LOG"
+          ALTOOL_EXIT=${PIPESTATUS[0]}
+
+          if [ "$ALTOOL_EXIT" -ne 0 ] || grep -qE "^[0-9-]+ .*ERROR:" "$UPLOAD_LOG" || grep -q "Failed to upload" "$UPLOAD_LOG"; then
+            echo "::error::App Store Connect upload failed. See the log above."
+            exit 1
+          fi
+          echo "Upload to App Store Connect succeeded."
 
       - name: Upload IPA artifact
         if: env.P12_BASE64 != ''
