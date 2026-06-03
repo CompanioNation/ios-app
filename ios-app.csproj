@@ -3,5 +3,6 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".github\workflows\build-staging.yml" />
   </ItemGroup>
 </Project>

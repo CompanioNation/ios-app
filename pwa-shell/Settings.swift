@@ -15,6 +15,18 @@ struct Cookie {
 
 let gcmMessageIDKey = "gcm.message_id"
 
+#if STAGING
+// Staging build: point the WebView at the Azure staging slot for Apple IAP
+// sandbox testing. This variant is built via the "pwa-shell (Staging)" scheme
+// and is never submitted to App Review.
+let rootUrl = URL(string: "https://companionation-alt.azurewebsites.net")!
+let allowedOrigins: [String] = [
+    "companionation-alt.azurewebsites.net",
+    "accounts.google.com",
+    "accounts.youtube.com",
+    "appleid.apple.com",
+]
+#else
 let rootUrl = URL(string: "https://companionation.com")!
 let allowedOrigins: [String] = [
     "companionation.com",
@@ -22,6 +34,7 @@ let allowedOrigins: [String] = [
     "accounts.youtube.com",
     "appleid.apple.com",
 ]
+#endif
 let authOrigins: [String] = [
     "accounts.google.com",
     "accounts.youtube.com",

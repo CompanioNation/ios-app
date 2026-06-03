@@ -47,16 +47,43 @@ class ViewController: UIViewController, WKNavigationDelegate, UIDocumentInteract
         initToolbarView()
         loadRootUrl()
         storeKitAPI = StoreKitAPI.init()
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification , object: nil)
-        
+
+        #if STAGING
+        addStagingBanner()
+        #endif
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         CompanioNation.webView.frame = calcWebviewFrame(webviewView: webviewView, toolbarView: nil)
     }
-    
+
+    #if STAGING
+    // Adds an unmistakable on-screen marker so a staging build (which points at the
+    // Azure staging slot for Apple IAP sandbox testing) can never be confused with a
+    // production build or accidentally submitted to App Review.
+    private func addStagingBanner() {
+        let banner = UILabel()
+        banner.text = "STAGING"
+        banner.textColor = .white
+        banner.backgroundColor = UIColor.systemRed.withAlphaComponent(0.85)
+        banner.font = UIFont.boldSystemFont(ofSize: 11)
+        banner.textAlignment = .center
+        banner.translatesAutoresizingMaskIntoConstraints = false
+        banner.layer.zPosition = 9999
+        view.addSubview(banner)
+
+        NSLayoutConstraint.activate([
+            banner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            banner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            banner.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            banner.heightAnchor.constraint(equalToConstant: 16),
+        ])
+    }
+    #endif
+
     @objc func keyboardWillHide(_ notification: NSNotification) {
         CompanioNation.webView.setNeedsLayout()
     }

@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>CompanioNation</string>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -102,12 +102,13 @@
 	<true/>
 	<key>WKAppBoundDomains</key>
 	<array>
-	    <string>companionation.com</string>
-	    <string>accounts.google.com</string>
-	    <string>accounts.youtube.com</string>
-	    <string>oauth2.googleapis.com</string>
-	    <string>apis.google.com</string>
-	    <string>appleid.apple.com</string>
+		<string>companionation.com</string>
+		<string>companionation-alt.azurewebsites.net</string>
+		<string>accounts.google.com</string>
+		<string>accounts.youtube.com</string>
+		<string>oauth2.googleapis.com</string>
+		<string>apis.google.com</string>
+		<string>appleid.apple.com</string>
 	</array>
 </dict>
 </plist>
