@@ -13,9 +13,11 @@ struct TransactionInfo: Codable {
 }
 
 @MainActor final class StoreKitAPI: ObservableObject {
-    // list of products for promoted purchases
-    static let IntentsProducts = ["demo_subscription_auto"]
-    
+    // List of products for promoted purchases (App Store-initiated). This must match the
+    // auto-renewable subscription product ID configured in App Store Connect and the
+    // APPLE_IAP_PRODUCT_ID environment variable used by the CompanioNation server.
+    static let IntentsProducts = ["com.companionation.companionita.monthly"]
+
     @Published private(set) var products: [Product] = []
     @Published private(set) var productsJson: String = "[]"
     @Published private(set) var activeTransactions: Set<StoreKit.Transaction> = []
