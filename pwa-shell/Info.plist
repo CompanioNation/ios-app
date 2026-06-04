@@ -103,7 +103,7 @@
 	<key>WKAppBoundDomains</key>
 	<array>
 		<string>companionation.com</string>
-		<string>companionation-alt.azurewebsites.net</string>
+		<string>companionationpwa-alt.azurewebsites.net</string>
 		<string>accounts.google.com</string>
 		<string>accounts.youtube.com</string>
 		<string>oauth2.googleapis.com</string>

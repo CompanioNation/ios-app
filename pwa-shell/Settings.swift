@@ -19,9 +19,9 @@ let gcmMessageIDKey = "gcm.message_id"
 // Staging build: point the WebView at the Azure staging slot for Apple IAP
 // sandbox testing. This variant is built via the "pwa-shell (Staging)" scheme
 // and is never submitted to App Review.
-let rootUrl = URL(string: "https://companionation-alt.azurewebsites.net")!
+let rootUrl = URL(string: "https://companionationpwa-alt.azurewebsites.net")!
 let allowedOrigins: [String] = [
-    "companionation-alt.azurewebsites.net",
+    "companionationpwa-alt.azurewebsites.net",
     "accounts.google.com",
     "accounts.youtube.com",
     "appleid.apple.com",

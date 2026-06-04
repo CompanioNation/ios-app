@@ -4,7 +4,7 @@ name: Build Staging iOS App
 # TestFlight (App Store Connect). This is identical to the production
 # "Build iOS App" workflow except it builds the "pwa-shell (Staging)" scheme /
 # "Staging" configuration, which points the WebView at the Azure staging slot
-# (https://companionation-alt.azurewebsites.net), shows a red "STAGING" banner,
+# (https://companionationpwa-alt.azurewebsites.net), shows a red "STAGING" banner,
 # and installs as "CompanioNation (Staging)".
 #
 # Uploading to TestFlight is NOT the same as submitting to the App Store. It just
