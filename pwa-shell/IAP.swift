@@ -154,23 +154,23 @@ struct TransactionInfo: Codable {
 
 func returnProductsResult(jsonString: String){
     DispatchQueue.main.async(execute: {
-        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-products-result', { detail: '\(jsonString)' }))")
+        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-products-result', { detail: \(jsStringLiteral(jsonString)) }))")
     })
 }
 
 func returnPurchaseResult(state: String){
     DispatchQueue.main.async(execute: {
-        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-purchase-result', { detail: '\(state)' }))")
+        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-purchase-result', { detail: \(jsStringLiteral(state)) }))")
     })
 }
 func returnPurchaseTransaction(jsonString: String){
     DispatchQueue.main.async(execute: {
-        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-purchase-transaction', { detail: '\(jsonString)' }))")
+        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-purchase-transaction', { detail: \(jsStringLiteral(jsonString)) }))")
     })
 }
 
 func returnActiveTransactions(jsonString: String){
     DispatchQueue.main.async(execute: {
-        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-transactions-result', { detail: '\(jsonString)' }))")
+        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-transactions-result', { detail: \(jsStringLiteral(jsonString)) }))")
     })
 }

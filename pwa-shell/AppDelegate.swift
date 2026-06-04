@@ -82,15 +82,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Unable to register for remote notifications: \(error.localizedDescription)")
       }
 
-      // This function is added here only for debugging purposes, and can be removed if swizzling is enabled.
-      // If swizzling is disabled then this function must be implemented so that the APNs token can be paired to
-      // the FCM registration token.
-//      func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        print("APNs token retrieved: \(deviceToken)")
-//
-//        // With swizzling disabled you must set the APNs token here.
-//        // Messaging.messaging().apnsToken = deviceToken
-//      }
+      // Explicitly pair the APNs device token with Firebase Messaging. Even though Firebase
+      // method swizzling is enabled (no FirebaseAppDelegateProxyEnabled=NO in Info.plist) and
+      // would normally do this automatically, setting it here is the recommended, swizzling-safe
+      // approach and guarantees an FCM registration token is generated so push can be delivered.
+      func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
+        print("APNs token retrieved: \(tokenString)")
+        Messaging.messaging().apnsToken = deviceToken
+      }
     }
 
     // [START ios_10_message_handling]

@@ -11,6 +11,29 @@ import WebKit
 import AuthenticationServices
 import SafariServices
 
+// Safely encode an arbitrary Swift string as a JavaScript string literal (including the
+// surrounding quotes) so it can be interpolated into `evaluateJavaScript` source without
+// breaking the script. Apostrophes in StoreKit product metadata or OAuth callback URLs
+// would otherwise terminate a single-quoted literal early and cause a JS SyntaxError.
+func jsStringLiteral(_ value: String) -> String {
+    // JSONSerialization produces a valid, fully-escaped JSON string, which is also a valid
+    // JavaScript double-quoted string literal (quotes, backslashes, control chars, and
+    // line/paragraph separators are all handled).
+    if let data = try? JSONSerialization.data(withJSONObject: [value], options: []),
+       var json = String(data: data, encoding: .utf8) {
+        // Strip the surrounding array brackets to leave just the quoted string literal.
+        json = json.trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+        return json
+    }
+    // Fallback: manual minimal escaping.
+    let escaped = value
+        .replacingOccurrences(of: "\\", with: "\\\\")
+        .replacingOccurrences(of: "'", with: "\\'")
+        .replacingOccurrences(of: "\n", with: "\\n")
+        .replacingOccurrences(of: "\r", with: "\\r")
+    return "'\(escaped)'"
+}
+
 
 func createWebView(container: UIView, WKSMH: WKScriptMessageHandler, WKND: WKNavigationDelegate, NSO: NSObject, VC: ViewController) -> WKWebView{
     
