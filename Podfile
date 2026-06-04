@@ -1,6 +1,15 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '15.0'
 
+# Map the custom "Staging" build configuration onto CocoaPods' :release behavior.
+# Without this, `pod install` does not generate a Pods-pwa-shell.staging.xcconfig
+# or wire up the [CP] script phases for Staging, producing a broken/unsigned
+# embedded-frameworks layout that iOS refuses to install.
+project 'pwa-shell.xcodeproj',
+  'Debug'   => :debug,
+  'Release' => :release,
+  'Staging' => :release
+
 target 'pwa-shell' do
   # Static linkage: Firebase compiles into the app binary.
   # No separate .framework bundles = no provisioning profile errors at export.
