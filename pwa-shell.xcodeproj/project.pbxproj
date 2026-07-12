@@ -450,7 +450,7 @@
 					"@executable_path/Frameworks",
 				);
 				APP_DISPLAY_NAME = CompanioNation;
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.companionation.app;
 				PRODUCT_NAME = CompanioNation;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -478,7 +478,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.companionation.app;
 				PRODUCT_NAME = CompanioNation;
 				APP_DISPLAY_NAME = CompanioNation;
@@ -506,7 +506,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.companionation.app;
 				PRODUCT_NAME = CompanioNation;
 				APP_DISPLAY_NAME = "CompanioNation (Staging)";
