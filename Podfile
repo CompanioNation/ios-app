@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '15.0'
+platform :ios, '16.4'
 
 # Map the custom "Staging" build configuration onto CocoaPods' :release behavior.
 # Without this, `pod install` does not generate a Pods-pwa-shell.staging.xcconfig
@@ -23,7 +23,7 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.4'
     end
   end
 end
