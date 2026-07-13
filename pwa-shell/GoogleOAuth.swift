@@ -64,9 +64,13 @@ extension ViewController: ASWebAuthenticationPresentationContextProviding {
 		}
 
 		session.presentationContextProvider = self
-		// Use an ephemeral session? No — we WANT Safari's shared cookies so an already
-		// signed-in Google session (and its 2FA state) carries through cleanly.
-		session.prefersEphemeralWebBrowserSession = false
+		// Use an ephemeral session: this gives ASWebAuthenticationSession its own isolated
+		// cookie store instead of Safari's shared one. Reusing the shared session made Google
+		// reject the flow with "This browser or app may not be secure" and also caused an
+		// instant silent sign-in (no account chooser). An ephemeral session presents a clean
+		// Google sign-in every time; combined with prompt=select_account the user can always
+		// choose / switch accounts, and 2FA still completes correctly.
+		session.prefersEphemeralWebBrowserSession = true
 
 		ViewController.googleAuthSession = session
 
