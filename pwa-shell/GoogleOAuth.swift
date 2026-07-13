@@ -15,6 +15,7 @@
 //
 
 import UIKit
+import WebKit
 import AuthenticationServices
 
 extension ViewController: ASWebAuthenticationPresentationContextProviding {
