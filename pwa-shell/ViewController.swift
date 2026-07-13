@@ -271,6 +271,8 @@ extension ViewController: WKScriptMessageHandler {
             case "companioNation":
                 // Presence-only handler so isNativeIosApp() JS detection returns true
                 break
+            case "google-oauth":
+                handleGoogleOAuth(message: message)
             case "print":
                 printView(webView: CompanioNation.webView)
             case "push-subscribe":

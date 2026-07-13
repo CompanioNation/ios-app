@@ -22,7 +22,6 @@ let gcmMessageIDKey = "gcm.message_id"
 let rootUrl = URL(string: "https://companionationpwa-alt.azurewebsites.net")!
 let allowedOrigins: [String] = [
     "companionationpwa-alt.azurewebsites.net",
-    "accounts.google.com",
     "accounts.youtube.com",
     "appleid.apple.com",
 ]
@@ -30,13 +29,14 @@ let allowedOrigins: [String] = [
 let rootUrl = URL(string: "https://companionation.com")!
 let allowedOrigins: [String] = [
     "companionation.com",
-    "accounts.google.com",
     "accounts.youtube.com",
     "appleid.apple.com",
 ]
 #endif
+// NOTE: accounts.google.com is intentionally NOT in allowedOrigins/authOrigins. Google sign-in
+// runs in ASWebAuthenticationSession (see GoogleOAuth.swift), NOT the main WKWebView — running it
+// in the embedded webview breaks Google's multi-step 2FA continuation and yields a generic 400.
 let authOrigins: [String] = [
-    "accounts.google.com",
     "accounts.youtube.com",
     "apis.google.com",
     "oauth2.googleapis.com",
