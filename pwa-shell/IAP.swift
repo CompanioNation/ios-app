@@ -87,13 +87,13 @@ struct TransactionInfo: Codable {
             let result = try await product.purchase(options: purchaseOptions)
             switch result {
             case .success(let verificationResult):
-                
+
                 if let transaction = try? verificationResult.payloadValue {
                     print("verificationResult")
                     print("appAccountToken: \(String(describing: transaction.appAccountToken))")
                     self.activeTransactions.insert(transaction)
                     await transaction.finish()
-                    
+
                     returnPurchaseTransaction(jsonString: String(data: transaction.jsonRepresentation, encoding: .utf8)!)
                 }
             case .userCancelled:
@@ -108,7 +108,27 @@ struct TransactionInfo: Codable {
             throw error
         }
     }
-    
+
+    // Restores the user's current App Store entitlement for the configured product.
+    func restorePurchases(productID: String) async throws -> String? {
+        try await AppStore.sync()
+        return await fetchCurrentEntitlementTransaction(productID: productID)
+    }
+
+    // Returns the signed transaction JSON for the active entitlement matching the product.
+    private func fetchCurrentEntitlementTransaction(productID: String) async -> String? {
+        for await verificationResult in Transaction.currentEntitlements {
+            guard let transaction = try? verificationResult.payloadValue,
+                  transaction.productID == productID else {
+                continue
+            }
+
+            return String(data: transaction.jsonRepresentation, encoding: .utf8)
+        }
+
+        return nil
+    }
+
     enum ProductError: Error {
         case productNotFound
         case userCanceled
@@ -166,6 +186,12 @@ func returnPurchaseResult(state: String){
 func returnPurchaseTransaction(jsonString: String){
     DispatchQueue.main.async(execute: {
         CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-purchase-transaction', { detail: \(jsStringLiteral(jsonString)) }))")
+    })
+}
+
+func returnRestoreTransaction(jsonString: String){
+    DispatchQueue.main.async(execute: {
+        CompanioNation.webView.evaluateJavaScript("this.dispatchEvent(new CustomEvent('iap-restore-transaction', { detail: \(jsStringLiteral(jsonString)) }))")
     })
 }
 

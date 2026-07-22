@@ -301,7 +301,7 @@ extension ViewController: WKScriptMessageHandler {
                                 if let productID = jsonObject["productID"] as? String {
                                     let quantity = jsonObject["quantity"] as? Int ?? 1;
                                     let userUUID = jsonObject["userUUID"] as? String ?? "00000000-0000-0000-0000-000000000000"
-                                    
+
                                     do {
                                         try await storeKitAPI.purchaseProduct(productID: productID, quantity: quantity, userUUID: userUUID)
                                         returnPurchaseResult(state: "success")
@@ -321,6 +321,20 @@ extension ViewController: WKScriptMessageHandler {
                     }
                 }
             }
+            case "iap-restore-request":
+                Task {
+                    if let productID = message.body as? String {
+                        do {
+                            if let signedTransaction = try await storeKitAPI.restorePurchases(productID: productID) {
+                                returnRestoreTransaction(jsonString: signedTransaction)
+                            } else {
+                                returnRestoreTransaction(jsonString: "")
+                            }
+                        } catch {
+                            returnRestoreTransaction(jsonString: "")
+                        }
+                    }
+                }
             case "iap-transactions-request":
                 Task {
                     do {
