@@ -34,6 +34,35 @@ func jsStringLiteral(_ value: String) -> String {
     return "'\(escaped)'"
 }
 
+// Inject the device's actual preferred languages into the WebView so the Blazor
+// culture auto-detection sees the real OS language. WKWebView normally reports
+// navigator.language based on the app's declared localizations (CFBundleLocalizations /
+// .lproj), which can fall back to English when the device language isn't declared.
+// Locale.preferredLanguages reads the OS preference directly, so auto-detection works
+// even for languages not yet declared in Info.plist.
+func deviceLanguagesScript() -> WKUserScript {
+    let languages = Locale.preferredLanguages
+    let jsArray: String
+    if let data = try? JSONSerialization.data(withJSONObject: languages, options: []),
+       let json = String(data: data, encoding: .utf8) {
+        jsArray = json
+    } else {
+        jsArray = "[]"
+    }
+
+    let source = """
+    (() => {
+        const languages = \(jsArray);
+        if (languages.length && typeof navigator !== 'undefined') {
+            Object.defineProperty(navigator, 'language', { get: () => languages[0], configurable: true });
+            Object.defineProperty(navigator, 'languages', { get: () => languages, configurable: true });
+        }
+    })();
+    """
+
+    return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+}
+
 
 func createWebView(container: UIView, WKSMH: WKScriptMessageHandler, WKND: WKNavigationDelegate, NSO: NSObject, VC: ViewController) -> WKWebView{
     
@@ -52,6 +81,7 @@ func createWebView(container: UIView, WKSMH: WKScriptMessageHandler, WKND: WKNav
     userContentController.add(WKSMH, name: "iap-set-uuid-request")
     userContentController.add(WKSMH, name: "companioNation")    
     userContentController.add(WKSMH, name: "google-oauth")
+    userContentController.addUserScript(deviceLanguagesScript())
     config.userContentController = userContentController
     
     config.limitsNavigationsToAppBoundDomains = true
